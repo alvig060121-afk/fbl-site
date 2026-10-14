@@ -24,7 +24,8 @@ const defaults = {
   },
   tracking: {
     // Tell visitors the tracker runs on demo data while the CRM is not connected.
-    showDemoHint: true,
+    // Off for the published site: visitors should not see demo numbers.
+    showDemoHint: false,
   },
   leads: {
     // 'messenger' — the request opens WhatsApp/Telegram with a ready text (works today).
