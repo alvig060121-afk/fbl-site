@@ -1,0 +1,167 @@
+{
+  "_how_to_replace": [
+    "Все фото страницы «О компании» перечислены здесь. Чтобы заменить фото своим: положите файл с тем же именем (проще всего) или поменяйте src.",
+    "Для своих фото поставьте \"illustrative\": false и \"credit\": null — пометка «Иллюстративное фото» и строка источника исчезнут.",
+    "После правки этого файла выполните: python3 tools/sync_partials.py"
+  ],
+  "photos": {
+    "about-hero": {
+      "src": "images/company/hero.jpg",
+      "alt": "Контейнерный терминал в порту вечером",
+      "illustrative": false,
+      "credit": {
+        "author": "Timelab",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/container-ship-at-industrial-port-yx20mpDyr2I",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-city-guangzhou": {
+      "src": "images/company/warehouses/guangzhou.jpg",
+      "alt": "Международный порт Гуанчжоу: контейнерный терминал и краны, вид сверху",
+      "illustrative": false,
+      "credit": {
+        "author": "Tim Wu",
+        "source": "Wikimedia Commons",
+        "url": "https://commons.wikimedia.org/wiki/File:Aerial_View_of_Phase_I,_Guangzhou_International_Port_20231224-C.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "уменьшен размер"
+      }
+    },
+    "about-city-yiwu": {
+      "src": "images/company/warehouses/yiwu.jpg",
+      "alt": "Международный торговый город Иу: вход в третий район",
+      "illustrative": false,
+      "credit": {
+        "author": "iamdanw (Flickr)",
+        "source": "Wikimedia Commons",
+        "url": "https://commons.wikimedia.org/wiki/File:Yiwu_International_Trade_Mart_-_District_3,_Gate_59.jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+        "changes": "уменьшен размер"
+      }
+    },
+    "about-city-foshan": {
+      "src": "images/company/warehouses/foshan.jpg",
+      "alt": "Аэросъёмка склада с грузовыми фурами у погрузочных доков",
+      "illustrative": false,
+      "credit": {
+        "author": "Marcin Jozwiak",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/aerial-view-of-vehicles-in-parking-area-oh0DITWoHi4",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-office": {
+      "src": "images/company/office/office.jpg",
+      "alt": "Современный офис с панорамными окнами",
+      "illustrative": false,
+      "credit": {
+        "author": "Nastuh Abootalebi",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/photo-of-dining-table-and-chairs-inside-room-eHD8Y1Znfpk",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-office-workspace": {
+      "src": "images/company/office/workspace.jpg",
+      "alt": "Рабочие места в светлом офисе",
+      "illustrative": false,
+      "credit": {
+        "author": "PHC Software",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/an-office-with-a-bike-parked-in-the-middle-of-the-room-7G6J0eXlmX0",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-office-talks": {
+      "src": "images/company/office/negotiations.jpg",
+      "alt": "Переговоры: обсуждение документов за столом",
+      "illustrative": false,
+      "credit": {
+        "author": "Carrie Allen",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/a-man-and-a-woman-sitting-at-a-white-table-1H1LBKvD7ew",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-office-process": {
+      "src": "images/company/office/process.jpg",
+      "alt": "Работа с документами и расчётами за ноутбуком",
+      "illustrative": false,
+      "credit": {
+        "author": "Scott Graham",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/person-holding-pencil-near-laptop-computer-5fNmWej4tAA",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-office-work": {
+      "src": "images/company/office/at-work.jpg",
+      "alt": "Люди за рабочими столами в офисе",
+      "illustrative": false,
+      "credit": {
+        "author": "Ant Rozetsky",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/person-sitting-beside-table-HXOllTSwrpM",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-team-1": {
+      "src": "images/company/team/team-1.jpg",
+      "alt": "Работа с товаром на складе",
+      "illustrative": false,
+      "credit": {
+        "author": "Reproductive Health Supplies Coalition",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/standing-man-in-orange-t-shirt-holding-white-box-1Bsqy0meA88",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-team-2": {
+      "src": "images/company/team/team-2.jpg",
+      "alt": "Проверка размеров изделия штангенциркулем",
+      "illustrative": false,
+      "credit": {
+        "author": "Hans Westbeek",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/hands-using-a-digital-caliper-to-measure-metal-part-_luiFaaZU6k",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-team-3": {
+      "src": "images/company/team/team-3.jpg",
+      "alt": "Упаковка заказа",
+      "illustrative": false,
+      "credit": {
+        "author": "Compagnons",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/a-person-holding-a-brown-paper-bag-on-top-of-a-table-mErtCMDgUEM",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    },
+    "about-team-4": {
+      "src": "images/company/team/team-4.jpg",
+      "alt": "Работа с заказом за ноутбуком",
+      "illustrative": false,
+      "credit": {
+        "author": "Burst",
+        "source": "Unsplash",
+        "url": "https://unsplash.com/photos/person-typing-on-silver-macbook-kUqqaRjJuw0",
+        "license": "Unsplash License",
+        "licenseUrl": "https://unsplash.com/license"
+      }
+    }
+  }
+}
