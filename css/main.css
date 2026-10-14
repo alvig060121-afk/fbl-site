@@ -598,7 +598,3 @@ html{scrollbar-color:var(--line-2) transparent;scrollbar-width:thin}
   .cat__t{font-size:14.5px}
 }
 
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{transition-duration:.01ms!important;transition-delay:0s!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
-}

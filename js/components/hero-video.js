@@ -1,6 +1,6 @@
 /* Home hero: background video on every screen width with the chapter rail synced to the footage.
-   Only visitors who ask their system for reduced motion keep the poster. */
-import { $, $$, prefersReducedMotion } from '../core/dom.js';
+   Plays regardless of the visitor's "reduce motion" system setting (owner's decision). */
+import { $, $$ } from '../core/dom.js';
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
@@ -9,11 +9,6 @@ export function initHeroVideo() {
   const video = hero && $('.hero__video', hero);
   if (!video) return;
   const chapters = $$('[data-chapters] li', hero);
-
-  if (prefersReducedMotion()) {
-    hero.classList.add('no-video');
-    return;
-  }
 
   let onScreen = true;
   video.src = video.dataset.src;

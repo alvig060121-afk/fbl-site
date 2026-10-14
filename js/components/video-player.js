@@ -1,8 +1,8 @@
 /* Video block (home Fulfillment section, Fulfillment page). Muted, looping, no visitor controls: it plays
-   by itself while on screen and pauses off screen to save the battery. Visitors who ask their system for
-   reduced motion keep the poster. With no data-src it shows the "ролик появится здесь" state, so a video
+   by itself while on screen and pauses off screen to save the battery, regardless of the visitor's
+   "reduce motion" system setting (owner's decision). With no data-src it shows the "ролик появится здесь" state, so a video
    can be added later by setting data-src (and optionally data-src-small) — no code change. */
-import { $$, prefersReducedMotion } from '../core/dom.js';
+import { $$ } from '../core/dom.js';
 
 export function initVideoPlayers() {
   $$('[data-video]').forEach(setup);
@@ -14,8 +14,6 @@ function setup(root) {
   const src = (small && root.dataset.srcSmall) || root.dataset.src;
 
   if (!video || !src) { root.classList.add('is-empty'); return; }
-  if (prefersReducedMotion()) return;
-
   let onScreen = false;
   let loaded = false;
 

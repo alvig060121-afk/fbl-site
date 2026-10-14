@@ -2,7 +2,7 @@
    scrolls into view. data-reveal         — the block fades up
                       data-reveal="stagger" — its children fade up one after another
                       data-reveal="route"   — a route/timeline draws its line station by station */
-import { $$, prefersReducedMotion } from '../core/dom.js';
+import { $$ } from '../core/dom.js';
 
 export function initReveal() {
   const blocks = $$('[data-reveal]');
@@ -13,7 +13,7 @@ export function initReveal() {
   $$('[data-reveal="route"]').forEach(route =>
     $$('.step', route).forEach((step, i) => step.style.setProperty('--i', String(i))));
 
-  if (prefersReducedMotion() || !('IntersectionObserver' in window)) {
+  if (!('IntersectionObserver' in window)) {
     blocks.forEach(b => b.classList.add('is-in'));
     return;
   }
