@@ -12,6 +12,7 @@ const components = [
   ['request-form', 'initRequestForm'],
   ['video-player', 'initVideoPlayers'],
   ['qr', 'initQr'],
+  ['catalog-viewer', 'initCatalogViewer'],
   ['signals', 'initSignals'],
 ];
 

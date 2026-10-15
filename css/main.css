@@ -526,6 +526,48 @@ html{scrollbar-color:var(--line-2) transparent;scrollbar-width:thin}
 .catalog--ask{border:1.5px dashed var(--line-2);border-radius:var(--r-lg);background:var(--bg-2);justify-content:flex-end}
 .catalog--ask .catalog__body{flex:none}
 
+/* ---------- catalog viewer (js/components/catalog-viewer.js) ---------- */
+html.is-cview-open,html.is-cview-open body{overflow:hidden}
+.cview{position:fixed;inset:0;z-index:100;display:grid;grid-template-rows:auto minmax(0,1fr) auto;background:var(--night);color:#fff;
+  opacity:0;transform:scale(.985);transition:opacity .35s var(--ease),transform .45s var(--ease)}
+.cview.is-open{opacity:1;transform:none}
+.cview__bar{display:flex;align-items:center;gap:16px;padding:calc(10px + env(safe-area-inset-top)) var(--gut) 10px}
+.cview__title{margin:0;flex:1;min-width:0;font-family:var(--f-display);font-weight:500;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.9}
+.cview__count{margin:0;font-family:var(--f-mono);font-size:13px;letter-spacing:.06em;opacity:.65;font-variant-numeric:tabular-nums}
+.cview__tools{display:flex;align-items:center;gap:6px}
+.cview__btn{display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.08);font-size:14px;font-weight:500;transition:background-color .2s}
+.cview__btn:hover{background:rgba(255,255,255,.16)}
+.cview__close{position:relative;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08);transition:background-color .2s}
+.cview__close:hover{background:rgba(255,255,255,.16)}
+.cview__close span{position:absolute;left:12px;right:12px;top:19.5px;height:1.6px;background:#fff;transform:rotate(45deg)}
+.cview__close span+span{transform:rotate(-45deg)}
+.cview__track{display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none;outline:none}
+.cview__track::-webkit-scrollbar{display:none}
+.cview__page{flex:0 0 100%;margin:0;display:flex;align-items:center;justify-content:center;padding:clamp(8px,2vh,24px) clamp(12px,6vw,96px);scroll-snap-align:center;scroll-snap-stop:always}
+.cview__page img{display:block;width:auto;height:auto;max-width:100%;max-height:100%;aspect-ratio:16/9;border-radius:8px;background:rgba(255,255,255,.06);
+  box-shadow:0 30px 80px -30px rgba(0,0,0,.7);opacity:0;transition:opacity .5s var(--ease)}
+.cview__page img.is-loaded{opacity:1;background:#fff}
+.cview__nav{position:absolute;top:50%;width:52px;height:52px;margin-top:-26px;border-radius:50%;background:rgba(255,255,255,.1);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:background-color .2s,opacity .2s}
+.cview__nav::before{content:"";position:absolute;top:50%;left:50%;width:11px;height:11px;border:solid #fff;border-width:1.8px 1.8px 0 0;transform:translate(-65%,-50%) rotate(45deg)}
+.cview__nav--prev{left:clamp(12px,2vw,32px)}
+.cview__nav--prev::before{transform:translate(-35%,-50%) rotate(-135deg)}
+.cview__nav--next{right:clamp(12px,2vw,32px)}
+.cview__nav:hover{background:rgba(255,255,255,.2)}
+.cview__nav:disabled{opacity:0;pointer-events:none}
+.cview__hint{display:none;margin:0;padding:0 var(--gut) 10px;text-align:center;font-size:13px;opacity:.55}
+.cview__progress{height:3px;background:rgba(255,255,255,.08)}
+.cview__progress span{display:block;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(0);transition:transform .45s var(--ease)}
+@media (hover:none){.cview__nav{display:none}}
+@media (max-width:640px){
+  .cview__title{display:none}
+  .cview__count{flex:1}
+  .cview__page{padding:8px 12px}
+}
+@media (max-width:640px) and (orientation:portrait){.cview__hint{display:block}}
+/* Phone held sideways: little height, so the bar and margins shrink and the page gets the room. */
+@media (max-height:500px){.cview__bar{padding-top:calc(4px + env(safe-area-inset-top));padding-bottom:4px}.cview__page{padding:4px max(12px,env(safe-area-inset-left))}}
+
 @media (max-width:1180px){
   .nav{gap:22px}
   .route{--gap:16px}
