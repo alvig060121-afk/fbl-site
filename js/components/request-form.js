@@ -3,21 +3,55 @@
 import { $, $$ } from '../core/dom.js';
 import { leads } from '../services/index.js';
 import { getSessionId } from '../core/session.js';
+import { pick } from '../core/i18n.js';
+
+const phoneOk = v => v.replace(/\D/g, '').length >= 7;
+const emailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 
 // Label shown in the summary and the check for every required field, in form order.
-const RULES = [
-  { key: 'name', label: 'Имя', empty: 'Заполните поле «Имя».' },
-  { key: 'phone', label: 'Телефон', empty: 'Заполните поле «Телефон».',
-    bad: 'Проверьте номер: в нём должно быть не меньше 7 цифр.',
-    ok: v => v.replace(/\D/g, '').length >= 7 },
-  { key: 'email', label: 'Email', empty: 'Заполните поле «Email».',
-    bad: 'Проверьте email: он должен быть вида name@example.com.',
-    ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) },
-  { key: 'country', label: 'Страна', empty: 'Укажите страну.' },
-  { key: 'task', label: 'Что нужно сделать', empty: 'Выберите, что нужно сделать.' },
-  { key: 'details', label: 'Ссылка на товар / фото / ТЗ или описание задачи',
-    empty: 'Вставьте ссылку на товар или опишите задачу.' },
-];
+const RULES = pick({
+  ru: [
+    { key: 'name', label: 'Имя', empty: 'Заполните поле «Имя».' },
+    { key: 'phone', label: 'Телефон', empty: 'Заполните поле «Телефон».',
+      bad: 'Проверьте номер: в нём должно быть не меньше 7 цифр.', ok: phoneOk },
+    { key: 'email', label: 'Email', empty: 'Заполните поле «Email».',
+      bad: 'Проверьте email: он должен быть вида name@example.com.', ok: emailOk },
+    { key: 'country', label: 'Страна', empty: 'Укажите страну.' },
+    { key: 'task', label: 'Что нужно сделать', empty: 'Выберите, что нужно сделать.' },
+    { key: 'details', label: 'Ссылка на товар / фото / ТЗ или описание задачи',
+      empty: 'Вставьте ссылку на товар или опишите задачу.' },
+  ],
+  en: [
+    { key: 'name', label: 'Name', empty: 'Please enter your name.' },
+    { key: 'phone', label: 'Phone', empty: 'Please enter your phone number.',
+      bad: 'Please check the number: it should have at least 7 digits.', ok: phoneOk },
+    { key: 'email', label: 'Email', empty: 'Please enter your email.',
+      bad: 'Please check the email: it should look like name@example.com.', ok: emailOk },
+    { key: 'country', label: 'Country', empty: 'Please enter your country.' },
+    { key: 'task', label: 'What do you need', empty: 'Please choose what you need.' },
+    { key: 'details', label: 'Product link / photos / specification or task description',
+      empty: 'Please paste a product link or describe your task.' },
+  ],
+});
+
+const TEXT = pick({
+  ru: {
+    summary: (names, single, allEmpty) => single
+      ? `${allEmpty ? 'Заполните' : 'Проверьте'} поле ${names}.`
+      : `${allEmpty ? 'Заполните обязательные поля' : 'Проверьте поля'}: ${names}.`,
+    quote: label => `«${label}»`,
+    failTitle: 'Не удалось отправить автоматически',
+    failDesc: 'Заявка не дошла до нашей системы. Отправьте её вручную в мессенджер — мы получим текст и ответим.',
+  },
+  en: {
+    summary: (names, single, allEmpty) => single
+      ? `Please ${allEmpty ? 'fill in' : 'check'} the field ${names}.`
+      : `Please ${allEmpty ? 'fill in the required fields' : 'check the fields'}: ${names}.`,
+    quote: label => `“${label}”`,
+    failTitle: 'Could not send automatically',
+    failDesc: 'Your request did not reach our system. Please send it to a messenger yourself — we will get the text and reply.',
+  },
+});
 
 async function copyText(text) {
   try { await navigator.clipboard.writeText(text); return true; }
@@ -43,7 +77,10 @@ export function initRequestForm() {
   const summary = $('[data-err="summary"]', form);
   const err = k => $(`[data-err="${k}"]`, form);
   const field = n => form.elements.namedItem(n);
+  // Values stay in Russian on every language version (the CRM matches services by them);
+  // the visible labels go into the messenger text, so a visitor sends what they read.
   const selectedTasks = () => taskInputs.filter(t => t.checked).map(t => t.value);
+  const selectedTaskLabels = () => taskInputs.filter(t => t.checked).map(t => t.closest('label').textContent.trim());
   const value = k => k === 'task' ? selectedTasks() : field(k).value.trim();
 
   const setError = (k, text) => {
@@ -61,10 +98,8 @@ export function initRequestForm() {
     summary.hidden = !list.length;
     if (!list.length) return;
     const allEmpty = list.every(r => problems.get(r.key) === 'empty');
-    const names = list.map(r => `«${r.label}»`).join(', ');
-    summary.textContent = list.length === 1
-      ? `${allEmpty ? 'Заполните' : 'Проверьте'} поле ${names}.`
-      : `${allEmpty ? 'Заполните обязательные поля' : 'Проверьте поля'}: ${names}.`;
+    const names = list.map(r => TEXT.quote(r.label)).join(', ');
+    summary.textContent = TEXT.summary(names, list.length === 1, allEmpty);
   };
   const clearError = k => {
     setError(k, '');
@@ -118,6 +153,7 @@ export function initRequestForm() {
     submit.disabled = true;
     const result = await leads.submit({
       tasks: value('task'),
+      taskLabels: selectedTaskLabels(),
       name: value('name'),
       phone: value('phone'),
       email: value('email'),
@@ -133,10 +169,8 @@ export function initRequestForm() {
     // 'error': the CRM was supposed to receive this and didn't confirm a lead — say so plainly,
     // never with the normal «Заявка готова» wording (prompt §5). 'messenger': no CRM on this
     // deployment, sending through a messenger is the intended path, not a failure.
-    sentTitle.textContent = result.via === 'error' ? 'Не удалось отправить автоматически' : sentDefaults.title;
-    sentDesc.textContent = result.via === 'error'
-      ? 'Заявка не дошла до нашей системы. Отправьте её вручную в мессенджер — мы получим текст и ответим.'
-      : sentDefaults.desc;
+    sentTitle.textContent = result.via === 'error' ? TEXT.failTitle : sentDefaults.title;
+    sentDesc.textContent = result.via === 'error' ? TEXT.failDesc : sentDefaults.desc;
     message = result.message;
     telegramUrl = result.telegramUrl;
     $('[data-send-wa]', sent).href = result.whatsappUrl;

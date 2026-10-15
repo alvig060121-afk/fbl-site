@@ -5,20 +5,46 @@ import { config, isMockApi } from '../config.js';
 import { tracking } from '../services/index.js';
 import { validateNumber } from '../services/tracking.js';
 import { NotFoundError, ValidationError, isAbort } from '../api/errors.js';
+import { pick } from '../core/i18n.js';
 
-const fmtDate = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-const fmtShort = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long' });
-const fmtStamp = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+const T = pick({
+  ru: {
+    locale: 'ru-RU', manager: 'Написать менеджеру', searching: 'Ищем груз…', shippedAt: 'Дата отправки',
+    notShipped: 'Ещё не отправлен', stage: 'Текущий этап', updated: 'Обновлено', shipment: n => `Груз ${n}`,
+    number: 'Номер груза', from: 'Откуда', to: 'Куда', stages: 'Этапы доставки',
+    empty: 'Введите номер груза.', format: 'Проверьте номер: латинские буквы, цифры и дефис, от 3 до 40 символов.',
+    notFound: 'Груз не найден',
+    notFoundText: n => `Номера ${n} нет в системе. Проверьте номер или напишите менеджеру — уточним статус вручную.`,
+    down: 'Сервис отслеживания временно недоступен',
+    downText: 'Попробуйте ещё раз через несколько минут или узнайте статус у менеджера.', retry: 'Повторить',
+    demo: 'Сейчас отслеживание работает на демонстрационных данных. Попробуйте номер ',
+  },
+  en: {
+    locale: 'en-GB', manager: 'Message a manager', searching: 'Looking for the shipment…', shippedAt: 'Shipped on',
+    notShipped: 'Not shipped yet', stage: 'Current stage', updated: 'Updated', shipment: n => `Shipment ${n}`,
+    number: 'Shipment number', from: 'From', to: 'To', stages: 'Delivery stages',
+    empty: 'Enter the shipment number.', format: 'Please check the number: Latin letters, digits and hyphens, 3 to 40 characters.',
+    notFound: 'Shipment not found',
+    notFoundText: n => `Number ${n} is not in our system. Check the number or message a manager — we will confirm the status manually.`,
+    down: 'Tracking is temporarily unavailable',
+    downText: 'Please try again in a few minutes or ask a manager for the status.', retry: 'Try again',
+    demo: 'Tracking currently runs on demo data. Try number ',
+  },
+});
+
+const fmtDate = new Intl.DateTimeFormat(T.locale, { day: 'numeric', month: 'long', year: 'numeric' });
+const fmtShort = new Intl.DateTimeFormat(T.locale, { day: 'numeric', month: 'long' });
+const fmtStamp = new Intl.DateTimeFormat(T.locale, { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 
 const DEMO_EXAMPLES = ['FBL-DEMO-1001', 'FBL-DEMO-1002', 'FBL-DEMO-1003'];
 
 const managerLink = () => h('a', {
   class: 'chip', href: `https://wa.me/${config.contacts.whatsapp}`, target: '_blank', rel: 'noopener',
-}, icon('i-wa'), 'Написать менеджеру');
+}, icon('i-wa'), T.manager);
 
 function loadingView() {
   return h('div', { class: 'ship ship--loading', 'aria-busy': 'true' },
-    h('p', { class: 'sr-only', text: 'Ищем груз…' }),
+    h('p', { class: 'sr-only', text: T.searching }),
     h('div', { class: 'skel skel--title' }),
     h('div', { class: 'skel skel--line' }),
     h('div', { class: 'skel-row' }, h('div', { class: 'skel' }), h('div', { class: 'skel' }), h('div', { class: 'skel' })));
@@ -33,26 +59,26 @@ function noticeView({ tone, title, text, actions = [] }) {
 
 function resultView(s) {
   const meta = [
-    ['Дата отправки', s.shippedAt ? fmtDate.format(s.shippedAt) : 'Ещё не отправлен'],
-    ['Текущий этап', s.currentStage],
-    ['Обновлено', s.updatedAt ? fmtStamp.format(s.updatedAt) : '—'],
+    [T.shippedAt, s.shippedAt ? fmtDate.format(s.shippedAt) : T.notShipped],
+    [T.stage, s.currentStage],
+    [T.updated, s.updatedAt ? fmtStamp.format(s.updatedAt) : '—'],
   ];
-  return h('article', { class: 'ship', 'aria-label': `Груз ${s.number}` },
+  return h('article', { class: 'ship', 'aria-label': T.shipment(s.number) },
     h('header', { class: 'ship__top' },
       h('div', null,
-        h('p', { class: 'ship__k', text: 'Номер груза' }),
+        h('p', { class: 'ship__k', text: T.number }),
         h('p', { class: 'ship__no', text: s.number })),
       h('span', { class: `badge badge--${s.status.tone}`, text: s.status.label })),
     h('div', { class: 'ship__route' },
       h('div', { class: 'ship__pt' },
-        h('span', { class: 'ship__k', text: 'Откуда' }),
+        h('span', { class: 'ship__k', text: T.from }),
         h('strong', { text: s.route.origin })),
       h('div', { class: 'ship__line', 'aria-hidden': 'true' },
         s.route.mode ? h('span', { text: s.route.mode }) : null),
       h('div', { class: 'ship__pt ship__pt--end' },
-        h('span', { class: 'ship__k', text: 'Куда' }),
+        h('span', { class: 'ship__k', text: T.to }),
         h('strong', { text: s.route.destination }))),
-    s.stages.length ? h('ol', { class: 'stages', style: `--n:${s.stages.length}`, 'aria-label': 'Этапы доставки' },
+    s.stages.length ? h('ol', { class: 'stages', style: `--n:${s.stages.length}`, 'aria-label': T.stages },
       s.stages.map(st => h('li', { class: `stage is-${st.state}`, 'aria-current': st.state === 'current' ? 'step' : null },
         h('span', { class: 'stage__dot', 'aria-hidden': 'true' }),
         h('span', { class: 'stage__t', text: st.label }),
@@ -86,9 +112,7 @@ export function initTracking() {
     out.setAttribute('aria-busy', String(on));
   };
 
-  const validationText = code => code === 'empty'
-    ? 'Введите номер груза.'
-    : 'Проверьте номер: латинские буквы, цифры и дефис, от 3 до 40 символов.';
+  const validationText = code => code === 'empty' ? T.empty : T.format;
 
   async function run() {
     ctrl?.abort();
@@ -118,18 +142,18 @@ export function initTracking() {
       } else if (err instanceof NotFoundError) {
         render(noticeView({
           tone: 'empty',
-          title: 'Груз не найден',
-          text: `Номера ${number} нет в системе. Проверьте номер или напишите менеджеру — уточним статус вручную.`,
+          title: T.notFound,
+          text: T.notFoundText(number),
           actions: [managerLink()],
         }));
       } else {
         console.warn('[tracking] service error', err);
         render(noticeView({
           tone: 'error',
-          title: 'Сервис отслеживания временно недоступен',
-          text: 'Попробуйте ещё раз через несколько минут или узнайте статус у менеджера.',
+          title: T.down,
+          text: T.downText,
           actions: [
-            h('button', { class: 'btn btn--line btn--sm', type: 'button', onclick: run, text: 'Повторить' }),
+            h('button', { class: 'btn btn--line btn--sm', type: 'button', onclick: run, text: T.retry }),
             managerLink(),
           ],
         }));
@@ -145,7 +169,7 @@ export function initTracking() {
   const demo = $('[data-track-demo]', root);
   if (demo && isMockApi && config.tracking.showDemoHint) {
     demo.replaceChildren(
-      'Сейчас отслеживание работает на демонстрационных данных. Попробуйте номер ',
+      T.demo,
       ...DEMO_EXAMPLES.flatMap((n, i) => [
         i ? ', ' : '',
         h('button', { type: 'button', class: 'track__ex', text: n, onclick: () => { input.value = n; run(); } }),

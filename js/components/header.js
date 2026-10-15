@@ -1,6 +1,9 @@
 /* Header: turns solid after a short scroll (only matters over the dark home hero) and runs the mobile menu.
    While the menu is open, Tab stays inside it (burger + menu links) and Esc closes it. */
 import { $, $$ } from '../core/dom.js';
+import { pick } from '../core/i18n.js';
+
+const MENU = pick({ ru: { open: 'Открыть меню', close: 'Закрыть меню' }, en: { open: 'Open menu', close: 'Close menu' } });
 
 export function initHeader() {
   const hdr = $('[data-hdr]');
@@ -40,8 +43,10 @@ export function initHeader() {
   };
   const setOpen = (open, { focus = false } = {}) => {
     nav.classList.toggle('is-open', open);
+    document.documentElement.classList.toggle('is-menu-open', open);   // page stays still, the menu scrolls
+    if (open) nav.scrollTop = 0;
     burger.setAttribute('aria-expanded', String(open));
-    burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    burger.setAttribute('aria-label', open ? MENU.close : MENU.open);
     sync();
     if (open && focus) links[0]?.focus();
   };
@@ -58,7 +63,7 @@ export function initHeader() {
     e.preventDefault();
     ring[next].focus();
   });
-  matchMedia('(min-width: 821px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
+  matchMedia('(min-width: 901px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
 
   let ticking = false;
   window.addEventListener('scroll', () => {

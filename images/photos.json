@@ -8,6 +8,7 @@
     "about-hero": {
       "src": "images/company/hero.jpg",
       "alt": "Контейнерный терминал в порту вечером",
+      "alt_en": "Container terminal at a port in the evening",
       "illustrative": false,
       "credit": {
         "author": "Timelab",
@@ -20,6 +21,7 @@
     "about-city-guangzhou": {
       "src": "images/company/warehouses/guangzhou.jpg",
       "alt": "Международный порт Гуанчжоу: контейнерный терминал и краны, вид сверху",
+      "alt_en": "Port of Guangzhou: container terminal and cranes, aerial view",
       "illustrative": false,
       "credit": {
         "author": "Tim Wu",
@@ -33,6 +35,7 @@
     "about-city-yiwu": {
       "src": "images/company/warehouses/yiwu.jpg",
       "alt": "Международный торговый город Иу: вход в третий район",
+      "alt_en": "Yiwu International Trade City: entrance to District 3",
       "illustrative": false,
       "credit": {
         "author": "iamdanw (Flickr)",
@@ -46,6 +49,7 @@
     "about-city-foshan": {
       "src": "images/company/warehouses/foshan.jpg",
       "alt": "Аэросъёмка склада с грузовыми фурами у погрузочных доков",
+      "alt_en": "Aerial view of a warehouse with trucks at the loading docks",
       "illustrative": false,
       "credit": {
         "author": "Marcin Jozwiak",
@@ -58,6 +62,7 @@
     "about-office": {
       "src": "images/company/office/office.jpg",
       "alt": "Современный офис с панорамными окнами",
+      "alt_en": "Modern office with panoramic windows",
       "illustrative": false,
       "credit": {
         "author": "Nastuh Abootalebi",
@@ -70,6 +75,7 @@
     "about-office-workspace": {
       "src": "images/company/office/workspace.jpg",
       "alt": "Рабочие места в светлом офисе",
+      "alt_en": "Workstations in a bright office",
       "illustrative": false,
       "credit": {
         "author": "PHC Software",
@@ -82,6 +88,7 @@
     "about-office-talks": {
       "src": "images/company/office/negotiations.jpg",
       "alt": "Переговоры: обсуждение документов за столом",
+      "alt_en": "Negotiations: discussing documents at a table",
       "illustrative": false,
       "credit": {
         "author": "Carrie Allen",
@@ -94,6 +101,7 @@
     "about-office-process": {
       "src": "images/company/office/process.jpg",
       "alt": "Работа с документами и расчётами за ноутбуком",
+      "alt_en": "Working on documents and calculations at a laptop",
       "illustrative": false,
       "credit": {
         "author": "Scott Graham",
@@ -106,6 +114,7 @@
     "about-office-work": {
       "src": "images/company/office/at-work.jpg",
       "alt": "Люди за рабочими столами в офисе",
+      "alt_en": "People at their desks in the office",
       "illustrative": false,
       "credit": {
         "author": "Ant Rozetsky",
@@ -118,6 +127,7 @@
     "about-team-1": {
       "src": "images/company/team/team-1.jpg",
       "alt": "Работа с товаром на складе",
+      "alt_en": "Handling goods at the warehouse",
       "illustrative": false,
       "credit": {
         "author": "Reproductive Health Supplies Coalition",
@@ -130,6 +140,7 @@
     "about-team-2": {
       "src": "images/company/team/team-2.jpg",
       "alt": "Проверка размеров изделия штангенциркулем",
+      "alt_en": "Measuring a product with a caliper",
       "illustrative": false,
       "credit": {
         "author": "Hans Westbeek",
@@ -142,6 +153,7 @@
     "about-team-3": {
       "src": "images/company/team/team-3.jpg",
       "alt": "Упаковка заказа",
+      "alt_en": "Packing an order",
       "illustrative": false,
       "credit": {
         "author": "Compagnons",
@@ -154,6 +166,7 @@
     "about-team-4": {
       "src": "images/company/team/team-4.jpg",
       "alt": "Работа с заказом за ноутбуком",
+      "alt_en": "Working on an order at a laptop",
       "illustrative": false,
       "credit": {
         "author": "Burst",

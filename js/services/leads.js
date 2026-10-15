@@ -1,17 +1,27 @@
 /* Lead (request) service. Today a request is handed to a messenger with a ready text;
    when the FBL API accepts leads, set config.leads.channel = 'api' and it goes to the CRM. */
+import { LANG } from '../core/i18n.js';
 
-export function leadMessage(lead) {
-  const tasks = (lead.tasks?.length ? lead.tasks : lead.task ? [lead.task] : []).join(', ');
+const MESSAGE = {
+  ru: { title: 'Заявка с сайта FBL Group', name: 'Имя', phone: 'Телефон', email: 'Email', company: 'Компания',
+    country: 'Страна', tasks: 'Что нужно сделать', details: 'Ссылка / описание задачи' },
+  en: { title: 'Request from the FBL Group website', name: 'Name', phone: 'Phone', email: 'Email', company: 'Company',
+    country: 'Country', tasks: 'What is needed', details: 'Link / task description' },
+};
+
+// The text goes to the manager in the visitor's own language, with the task names the visitor saw.
+export function leadMessage(lead, lang = LANG) {
+  const t = MESSAGE[lang] ?? MESSAGE.ru;
+  const list = lead.taskLabels?.length ? lead.taskLabels : lead.tasks?.length ? lead.tasks : lead.task ? [lead.task] : [];
   return [
-    'Заявка с сайта FBL Group',
-    `Имя: ${lead.name}`,
-    `Телефон: ${lead.phone}`,
-    `Email: ${lead.email}`,
-    lead.company ? `Компания: ${lead.company}` : null,
-    lead.country ? `Страна: ${lead.country}` : null,
-    `Что нужно сделать: ${tasks}`,
-    `Ссылка / описание задачи:\n${lead.details}`,
+    t.title,
+    `${t.name}: ${lead.name}`,
+    `${t.phone}: ${lead.phone}`,
+    `${t.email}: ${lead.email}`,
+    lead.company ? `${t.company}: ${lead.company}` : null,
+    lead.country ? `${t.country}: ${lead.country}` : null,
+    `${t.tasks}: ${list.join(', ')}`,
+    `${t.details}:\n${lead.details}`,
   ].filter(Boolean).join('\n');
 }
 
