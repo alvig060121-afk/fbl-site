@@ -110,9 +110,12 @@ html{scrollbar-color:var(--line-2) transparent;scrollbar-width:thin}
 .link-btn:hover{color:var(--ink);text-decoration-color:currentColor}
 
 /* ---------- header ---------- */
-@keyframes menu-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-.hdr{position:fixed;inset:0 0 auto 0;z-index:50;height:var(--hdr);color:var(--ink);background:rgba(255,255,255,.96);box-shadow:0 1px 0 var(--line);transition:background-color .35s var(--ease),color .35s var(--ease),box-shadow .35s var(--ease)}
-@supports (backdrop-filter:blur(8px)){.hdr{background:rgba(255,255,255,.86);backdrop-filter:saturate(1.4) blur(14px)}}
+@keyframes menu-in{from{opacity:0}to{opacity:1}}
+@keyframes menu-item{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* Solid, not see-through: a translucent bar turned muddy grey over the dark hero. ::before paints the same colour
+   above the bar, so nothing of the page shows between it and the browser's own toolbar while scrolling. */
+.hdr{position:fixed;inset:0 0 auto 0;z-index:50;height:var(--hdr);color:var(--ink);background:#fff;box-shadow:0 1px 0 var(--line),0 10px 30px -22px rgba(14,27,61,.35);transition:background-color .35s var(--ease),color .35s var(--ease),box-shadow .35s var(--ease)}
+.hdr::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:inherit;pointer-events:none}
 .has-dark-hero .hdr:not(.is-solid){background:transparent;box-shadow:none;color:#fff;backdrop-filter:none}
 .hdr__in{height:100%;display:flex;align-items:center;gap:32px}
 .brand{display:inline-flex;align-items:center;gap:10px;flex:none}
@@ -549,24 +552,29 @@ html{scrollbar-color:var(--line-2) transparent;scrollbar-width:thin}
 @media (max-width:900px){
   .nav{display:none}
   .burger{display:block}
-  /* Open menu: a full-height sheet under the header that scrolls on its own while the page stays put
-     (html.is-menu-open locks the page, js/components/header.js). */
-  /* Explicit height, not bottom:0: the header's backdrop-filter makes it the containing block of this fixed sheet. */
-  .nav.is-open{display:flex;position:fixed;top:var(--hdr);left:0;right:0;height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr));flex-direction:column;gap:0;margin:0;
-    padding:8px var(--gut) calc(28px + env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
-    background:var(--bg);color:var(--ink);box-shadow:inset 0 1px 0 var(--line);animation:menu-in .28s var(--ease) both}
-  .nav.is-open>a{opacity:1;display:flex;align-items:center;justify-content:space-between;min-height:64px;padding:0;border-bottom:1px solid var(--line);
-    font-family:var(--f-display);font-size:22px;font-weight:500;letter-spacing:-.01em}
-  .nav.is-open>a::after{content:"";position:static;width:8px;height:8px;border:solid currentColor;border-width:1.6px 1.6px 0 0;border-radius:0;background:none;transform:rotate(45deg);opacity:.35}
-  .nav.is-open>a[aria-current="page"]{color:var(--accent-ink)}
-  .nav.is-open>a[aria-current="page"]::after{opacity:1}
-  .nav.is-open .nav__extra{display:grid;gap:20px;margin-top:auto;padding-top:32px}
-  .nav__contact{display:grid;gap:12px;padding:20px;border-radius:var(--r-lg);background:var(--bg-2)}
-  .nav__num{font-family:var(--f-display);font-size:20px;font-weight:600;letter-spacing:-.01em}
-  .nav__contact .contact__act{display:flex;flex-wrap:wrap;gap:8px}
-  .nav__langs{display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:var(--r-sm);background:var(--bg-2);font-size:15px;font-weight:600}
-  .nav__langs>*{display:flex;align-items:center;justify-content:center;height:44px;border-radius:calc(var(--r-sm) - 2px);opacity:.6}
-  .nav__langs>[aria-current]{opacity:1;background:var(--bg);box-shadow:var(--sh-1)}
+  /* Open menu: a full-height navy sheet under the header (which turns navy too), scrolling on its own while the page
+     stays put (html.is-menu-open, js/components/header.js). Explicit height, not bottom:0: the fixed header is its
+     containing block. */
+  .nav.is-open{display:flex;position:fixed;top:var(--hdr);left:0;right:0;height:calc(100vh - var(--hdr));height:calc(100dvh - var(--hdr));
+    flex-direction:column;gap:0;margin:0;padding:clamp(12px,3vh,32px) var(--gut) calc(28px + env(safe-area-inset-bottom));
+    overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;counter-reset:menu;
+    background:var(--night);color:#fff;animation:menu-in .32s var(--ease) both}
+  .nav.is-open>a{counter-increment:menu;opacity:1;display:flex;align-items:baseline;gap:18px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.1);
+    font-family:var(--f-display);font-size:clamp(28px,8vw,40px);font-weight:500;line-height:1.1;letter-spacing:-.025em;color:rgba(255,255,255,.92);
+    animation:menu-item .45s var(--ease) both}
+  .nav.is-open>a::before{content:counter(menu,decimal-leading-zero);font-family:var(--f-mono);font-size:12px;font-weight:500;letter-spacing:.08em;color:rgba(255,255,255,.4);min-width:22px}
+  .nav.is-open>a::after{display:none}
+  .nav.is-open>a:nth-child(2){animation-delay:.04s}
+  .nav.is-open>a:nth-child(3){animation-delay:.08s}
+  .nav.is-open>a:nth-child(4){animation-delay:.12s}
+  .nav.is-open>a[aria-current="page"]{color:#fff}
+  .nav.is-open>a[aria-current="page"]::before{color:var(--accent)}
+  .nav.is-open .nav__extra{display:flex;margin-top:auto;padding-top:40px}
+  .nav__langs{display:flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.14);border-radius:999px;font-size:14px;font-weight:600;letter-spacing:.02em}
+  .nav__langs>*{display:flex;align-items:center;justify-content:center;height:40px;padding:0 20px;border-radius:999px;color:rgba(255,255,255,.6)}
+  .nav__langs>[aria-current]{color:var(--night);background:#fff}
+  .hdr.is-menu{background:var(--night);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.08)}
+  .hdr.is-menu .brand__mark{filter:brightness(0) invert(1)}
   html.is-menu-open,html.is-menu-open body{overflow:hidden}
 }
 @media (max-width:640px){

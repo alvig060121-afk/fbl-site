@@ -37,8 +37,15 @@ export function initHeader() {
     });
   };
 
+  // The browser's own bar (Safari, Chrome on Android) takes this colour, so it always matches the header below it.
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  const darkHero = document.body.classList.contains('has-dark-hero');
+
   const sync = () => {
-    hdr.classList.toggle('is-solid', isOpen() || window.scrollY > 40);
+    const solid = isOpen() || window.scrollY > 40;
+    hdr.classList.toggle('is-solid', solid);
+    hdr.classList.toggle('is-menu', isOpen());
+    themeColor?.setAttribute('content', isOpen() || (darkHero && !solid) ? '#0B1224' : '#FFFFFF');
     syncActive();
   };
   const setOpen = (open, { focus = false } = {}) => {
