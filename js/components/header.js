@@ -1,4 +1,4 @@
-/* Header: turns solid after a short scroll (only matters over the dark home hero) and runs the mobile menu.
+/* Header: hides while scrolling down and returns on scroll up; turns solid after a short scroll (only matters over the dark home hero) and runs the mobile menu.
    While the menu is open, Tab stays inside it (burger + menu links) and Esc closes it. */
 import { $, $$ } from '../core/dom.js';
 import { pick } from '../core/i18n.js';
@@ -58,8 +58,11 @@ export function initHeader() {
     if (open && focus) links[0]?.focus();
   };
 
-  burger.addEventListener('click', () => setOpen(!isOpen(), { focus: true }));
+  // detail === 0: opened from the keyboard, so focus moves into the menu; a tap leaves no focus ring behind.
+  burger.addEventListener('click', e => setOpen(!isOpen(), { focus: e.detail === 0 }));
   links.forEach(a => a.addEventListener('click', () => setOpen(false)));
+  // A tap on the dimmed page behind the menu closes it.
+  document.addEventListener('click', e => { if (isOpen() && !hdr.contains(e.target)) setOpen(false); });
   document.addEventListener('keydown', e => {
     if (!isOpen()) return;
     if (e.key === 'Escape') { setOpen(false); burger.focus(); return; }
@@ -72,11 +75,25 @@ export function initHeader() {
   });
   matchMedia('(min-width: 901px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
 
+  // Header gets out of the way while reading: scrolling down slides it off, any scroll up brings it back.
+  const SHOW_ABOVE = 120;   // px from the top where the header always stays
+  const JITTER = 6;         // ignore tiny finger wobble
+  let lastY = window.scrollY;
+  const syncVisibility = () => {
+    const y = Math.max(0, window.scrollY);
+    const dy = y - lastY;
+    if (isOpen() || y < SHOW_ABOVE || hdr.contains(document.activeElement)) hdr.classList.remove('is-hidden');
+    else if (dy > JITTER) hdr.classList.add('is-hidden');
+    else if (dy < -JITTER) hdr.classList.remove('is-hidden');
+    if (Math.abs(dy) > JITTER) lastY = y;
+  };
+  hdr.addEventListener('focusin', () => hdr.classList.remove('is-hidden'));
+
   let ticking = false;
   window.addEventListener('scroll', () => {
     if (ticking) return;
     ticking = true;
-    requestAnimationFrame(() => { sync(); ticking = false; });
+    requestAnimationFrame(() => { sync(); syncVisibility(); ticking = false; });
   }, { passive: true });
   sync();
 }
