@@ -73,7 +73,7 @@ export function initHeader() {
     e.preventDefault();
     ring[next].focus();
   });
-  matchMedia('(min-width: 901px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
+  matchMedia('(min-width: 1141px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
 
   // Header gets out of the way while reading: scrolling down slides it off, any scroll up brings it back.
   const SHOW_ABOVE = 120;   // px from the top where the header always stays
