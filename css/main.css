@@ -714,3 +714,11 @@ html.is-cview-open,html.is-cview-open body{overflow:hidden}
   .cat__t{font-size:14.5px}
 }
 
+/* Мебель: каталоги по категориям */
+.fcats-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:clamp(36px,4.5vw,56px)}
+.fcat{scroll-margin-top:96px}
+.fcat+.fcat{margin-top:clamp(56px,7vw,96px)}
+.fcat--ask{margin-top:clamp(40px,5vw,64px)!important}
+.fcat__head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--line-2)}
+.fcat__head .h3{margin:0}
+.fcat__count{margin:0;font-size:15px;color:var(--muted,#6B7486)}
