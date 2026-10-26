@@ -764,3 +764,17 @@ html.is-cview-open,html.is-cview-open body{overflow:hidden}
 .sources li{scroll-margin-top:calc(var(--hdr) + 24px)}
 .sources li:target{color:var(--ink)}
 .sources__note{margin-top:1.2em;font-size:14px;color:var(--muted)}
+/* Article figures (SVG diagrams) and data tables. */
+.art__fig{margin-block:1.6em!important}
+.art__fig img{width:100%;max-width:560px;height:auto;border-radius:var(--r)}
+.art__fig figcaption{margin-top:.6em;font-size:14px;line-height:1.5;color:var(--muted)}
+.art__table{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:var(--r)}
+.art__table table{width:100%;min-width:480px;border-collapse:collapse;font-size:15px;line-height:1.45}
+.art__table th,.art__table td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.art__table th{font-weight:600;color:var(--ink);background:var(--bg-2)}
+.art__table tr:last-child td{border-bottom:0}
+.art__table td:nth-child(2){white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+@media (max-width:640px){
+  .art__table table{min-width:0;font-size:14px}
+  .art__table th,.art__table td{padding:10px}
+}
