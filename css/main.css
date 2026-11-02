@@ -755,8 +755,8 @@ html.is-cview-open,html.is-cview-open body{overflow:hidden}
 .prose li::marker{color:var(--accent)}
 .prose .note{padding:clamp(18px,2vw,24px);border-radius:var(--r);background:var(--accent-soft)}
 /* Footnote marks link to the numbered list in .sources at the end of the article. */
-.prose a.fn{display:inline-block;margin-left:2px;padding:0 3px;font-size:.68em;font-weight:600;line-height:1;vertical-align:super;text-decoration:none;border-radius:4px}
-.prose a.fn:hover{background:var(--accent-soft)}
+.prose a.fn,.lead a.fn{display:inline-block;margin-left:2px;padding:0 3px;font-size:.68em;font-weight:600;line-height:1;vertical-align:super;text-decoration:none;border-radius:4px}
+.prose a.fn:hover,.lead a.fn:hover{background:var(--accent-soft)}
 .prose a.fn+a.fn{margin-left:1px}
 .sources{margin-top:3em!important;padding-top:2em;border-top:1px solid var(--line)}
 .sources h2{margin-top:0;font-size:clamp(19px,1.5vw,22px)}
