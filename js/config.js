@@ -34,7 +34,7 @@ const defaults = {
   },
   analytics: {
     // Yandex Metrika counter number (digits). null = no counter, no cookies, nothing is loaded.
-    yandexMetrikaId: null,
+    yandexMetrikaId: 114385118,
   },
   contacts: {
     whatsapp: '79183083313',

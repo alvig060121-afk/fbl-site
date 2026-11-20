@@ -9,10 +9,61 @@
      catalog_pdf     — a PDF catalog was opened or downloaded
 
    No counter id — this file does nothing: no script, no cookies.
+   With a counter id the visitor is asked first (banner); Metrika loads only after «Принять».
+   The choice is kept in localStorage; any [data-cookie-settings] button asks again.
 */
 import { config } from '../config.js';
 
 const TAG_URL = 'https://mc.yandex.ru/metrika/tag.js';
+const CONSENT_KEY = 'fbl-analytics-consent';   // 'yes' | 'no'
+const TEXT = {
+  ru: { msg: 'Мы используем cookies и Яндекс Метрику, чтобы понимать, как посетители пользуются сайтом. Метрика включится только с вашего согласия.',
+        more: 'Политика конфиденциальности', yes: 'Принять', no: 'Отклонить', href: '/privacy/' },
+  en: { msg: 'We use cookies and Yandex Metrica to understand how visitors use the site. Metrica is switched on only with your consent.',
+        more: 'Privacy policy', yes: 'Accept', no: 'Decline', href: '/en/privacy/' },
+};
+const STYLE = `.cookie{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;max-width:560px;margin:0 auto;padding:18px 20px;border-radius:16px;background:#0E1B3D;color:#fff;box-shadow:0 12px 40px rgba(14,27,61,.28);font-size:15px;line-height:1.5}
+.cookie p{margin:0 0 12px}.cookie a{color:#fff;text-decoration:underline}
+.cookie__btns{display:flex;gap:10px;flex-wrap:wrap}.cookie button{font:inherit;font-weight:600;padding:10px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;cursor:pointer}
+.cookie button[data-yes]{background:#2F6BE8;border-color:#2F6BE8}
+.ftr__cookie{margin-left:12px;padding:0;border:0;background:none;color:inherit;font:inherit;text-decoration:underline;cursor:pointer}`;
+
+function readConsent() {
+  try { return localStorage.getItem(CONSENT_KEY); } catch { return null; }
+}
+
+function saveConsent(value) {
+  try { localStorage.setItem(CONSENT_KEY, value); } catch { /* private mode: ask again next time */ }
+}
+
+function addStyle() {
+  if (document.getElementById('cookie-style')) return;
+  const st = document.createElement('style');
+  st.id = 'cookie-style';
+  st.textContent = STYLE;
+  document.head.appendChild(st);
+}
+
+function askConsent(onYes) {
+  if (document.querySelector('.cookie')) return;
+  const t = TEXT[document.documentElement.lang === 'en' ? 'en' : 'ru'];
+  addStyle();
+  const box = document.createElement('div');
+  box.className = 'cookie';
+  box.setAttribute('role', 'dialog');
+  box.setAttribute('aria-label', t.more);
+  box.innerHTML = `<p>${t.msg} <a href="${t.href}">${t.more}</a></p>`
+    + `<div class="cookie__btns"><button type="button" data-yes>${t.yes}</button><button type="button" data-no>${t.no}</button></div>`;
+  box.addEventListener('click', e => {
+    const yes = e.target.closest('[data-yes]');
+    const no = e.target.closest('[data-no]');
+    if (!yes && !no) return;
+    saveConsent(yes ? 'yes' : 'no');
+    box.remove();
+    if (yes) onYes();
+  });
+  document.body.appendChild(box);
+}
 
 const GOALS = [
   ['whatsapp', a => /(^|\.)wa\.me$|whatsapp\.com$/.test(a.hostname)],
@@ -47,7 +98,23 @@ export function initAnalytics() {
     console.error('[fbl] analytics: yandexMetrikaId must be a positive integer, got', raw);
     return;
   }
-  loadTag(id);
+  addStyle();
+  document.querySelectorAll('[data-cookie-settings]').forEach(b => { b.hidden = false; });
+  let started = false;
+  const start = () => {
+    if (started) return;
+    started = true;
+    loadTag(id);
+    bindGoals(id);
+  };
+  document.addEventListener('click', e => {
+    if (e.target.closest?.('[data-cookie-settings]')) askConsent(start);
+  });
+  if (readConsent() === 'yes') start();
+  else if (readConsent() !== 'no') askConsent(start);
+}
+
+function bindGoals(id) {
   const reach = goal => window.ym(id, 'reachGoal', goal);
 
   document.addEventListener('click', e => {
