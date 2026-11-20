@@ -14,6 +14,7 @@ const components = [
   ['qr', 'initQr'],
   ['catalog-viewer', 'initCatalogViewer'],
   ['signals', 'initSignals'],
+  ['analytics', 'initAnalytics'],
 ];
 
 for (const [file, init] of components) {

@@ -32,6 +32,10 @@ const defaults = {
     // 'api'       — POST /leads to the FBL API; falls back to the messenger if the API fails.
     channel: isLocalCrm ? 'api' : 'messenger',
   },
+  analytics: {
+    // Yandex Metrika counter number (digits). null = no counter, no cookies, nothing is loaded.
+    yandexMetrikaId: null,
+  },
   contacts: {
     whatsapp: '79183083313',
     telegram: 'https://t.me/+79183083313',
