@@ -39,6 +39,8 @@ export function createLeadService({ transport, channel, contacts }) {
 
   return {
     async submit(lead) {
+      // One id per request, so a retry or double click stores one lead in the CRM, not two.
+      lead = { ...lead, requestId: lead.requestId ?? globalThis.crypto?.randomUUID?.() };
       console.info('[leads] FORM SUBMITTED', { name: lead.name, phone: lead.phone });
       // The demo transport stores nothing — this deployment has no CRM to reach, so a plain
       // «send via messenger» handoff is the intended, non-error path (not a failure to log as one).
@@ -51,7 +53,8 @@ export function createLeadService({ transport, channel, contacts }) {
         const res = await transport.post('/leads', {
           name: lead.name, phone: lead.phone, email: lead.email,
           company: lead.company || undefined, country: lead.country || undefined,
-          tasks: lead.tasks, details: lead.details,
+          tasks: lead.tasks, taskLabels: lead.taskLabels, details: lead.details,
+          requestId: lead.requestId,
           source: location.pathname, sessionId: lead.sessionId ?? undefined,
           website: lead.website || undefined, // honeypot: empty for real visitors
         });

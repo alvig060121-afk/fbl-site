@@ -29,8 +29,11 @@ const defaults = {
   },
   leads: {
     // 'messenger' — the request opens WhatsApp/Telegram with a ready text (works today).
-    // 'api'       — POST /leads to the FBL API; falls back to the messenger if the API fails.
-    channel: isLocalCrm ? 'api' : 'messenger',
+    // 'api'       — POST /leads to the CRM; falls back to the messenger if the CRM fails.
+    channel: 'api',
+    // Where requests go: the CRM's public intake (fblcrm.com, project FBL Logistic). Separate from
+    // api.baseUrl so the tracker can stay on demo data while requests already reach the CRM.
+    apiBaseUrl: isLocalCrm ? crmBaseUrl : 'https://fblcrm.com/api/public/fbl-site',
   },
   analytics: {
     // Yandex Metrika counter number (digits). null = no counter, no cookies, nothing is loaded.
