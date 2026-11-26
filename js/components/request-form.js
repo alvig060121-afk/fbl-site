@@ -148,6 +148,8 @@ export function initRequestForm() {
       (first === 'task' ? taskInputs[0] : field(first)).focus();
       return;
     }
+    // Analytics counts a request only once the form has passed validation.
+    form.dispatchEvent(new CustomEvent('fbl:request-valid', { bubbles: true }));
 
     const submit = $('.form__submit', form);
     submit.disabled = true;

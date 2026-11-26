@@ -3,7 +3,7 @@
    these identifiers in Metrika):
 
      request_click   — a link or button that leads to the request form (#request)
-     request_submit  — the request form was submitted
+     request_submit  — the request form was submitted and passed validation
      whatsapp        — a WhatsApp link (wa.me)
      telegram        — a Telegram link (t.me)
      catalog_pdf     — a PDF catalog was opened or downloaded
@@ -124,7 +124,6 @@ function bindGoals(id) {
     if (goal) reach(goal);
   }, { capture: true });
 
-  document.addEventListener('submit', e => {
-    if (e.target.closest?.('#request, .req')) reach('request_submit');
-  }, { capture: true });
+  // Fired by request-form.js after validation, so a form with errors is not counted.
+  document.addEventListener('fbl:request-valid', () => reach('request_submit'));
 }

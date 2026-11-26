@@ -14,6 +14,7 @@ const components = [
   ['qr', 'initQr'],
   ['catalog-viewer', 'initCatalogViewer'],
   ['signals', 'initSignals'],
+  ['calculator', 'initCalculator'],
   ['analytics', 'initAnalytics'],
 ];
 
