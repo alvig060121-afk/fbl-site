@@ -124,7 +124,7 @@ html{scrollbar-color:var(--line-2) transparent;scrollbar-width:thin}
 .has-dark-hero .hdr:not(.is-solid) .brand__mark{filter:brightness(0) invert(1)}
 .brand__name{font-family:var(--f-display);font-weight:600;font-size:19px;letter-spacing:-.02em}
 .nav{display:flex;gap:30px;margin-left:16px;font-size:15px}
-.nav a{position:relative;opacity:.82;padding-block:6px;transition:opacity .2s}
+.nav a{position:relative;opacity:.82;padding-block:6px;white-space:nowrap;transition:opacity .2s}
 .nav a:hover,.nav a[aria-current="page"]{opacity:1}
 .nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:2px;background:var(--accent)}
 .hdr__act{margin-left:auto;display:flex;align-items:center;gap:8px}
